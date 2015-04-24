@@ -1,0 +1,77 @@
+﻿<!doctype html>
+<html ng-app="demo">
+<head>
+    <meta charset="utf-8">
+    <title>demo</title>
+	<!--<script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>-->
+	<!--<script type="text/javascript" src="http://www.w3cschool.cc/try/angularjs/1.2.5/angular.min.js"></script>-->
+	<script type="text/javascript" src="angular.min.js"></script>
+	<script>
+		var app = angular.module('demo',[]).value("testvalue","word").factory('testfactory',function(testvalue){
+			return{
+				lable:function(){
+					return "this can output : hello "+ testvalue;
+				}
+			}
+		});
+		
+		app.controller('phoneController',function($scope){
+			$scope.phones = [ { name : 'zzj' , snippet : '123456' },{ name : 'zs' , snippet : '7864' } ];
+			//$scope.tip = testfactory.lable();
+			$scope.tip = "this is tip";
+		});
+		
+		
+		app.webController("webcontroller",function($scope,$http){
+			$http.get("http://www.w3cschool.cc/try/angularjs/data/Customers_JSON.php").success(function(response) {
+				alert("xxxx");
+				$scope.names = response;
+			});
+		});
+		
+		
+		//function phoneController($scope){
+			//$scope.phones = [ { name : 'zzj' , snippet : '123456' },{ name : 'zs' , snippet : '7864' } ]; //1.2.5
+		//}
+	</script>
+</head>
+<body>
+	用户名：<input type="text" ng-model="username" placeholder="张三">
+        <hr>
+        Hello {{username || 'World'}}!
+		
+		<p>Nothing here {{'yet' + '!'}}</p>
+		<p>1 + 2 = {{ 1 + 2 }}</p>
+		<div>
+		<ul>
+    <li>
+        <span>Nexus S</span>
+        <p>
+        Fast just got faster with Nexus S.
+        </p>
+    </li>
+    <li>
+        <span>Motorola XOOM™ with Wi-Fi</span>
+        <p>
+        The Next, Next Generation tablet.
+        </p>
+    </li>
+</ul>
+</div> 
+
+<div  ng-controller="phoneController">
+<ul>
+    <li ng-repeat="phone in phones">
+      {{phone.name}}
+    <p>{{phone.snippet}}</p>
+    </li>
+  </ul>
+  {{tip}}
+</div>
+<div ng-controller="webcontroller">
+	<li ng-repeat="p in names">
+		{{p.Name}}
+	</li>
+</div>
+</body>
+</html>

@@ -15,24 +15,87 @@
 		name:{{name}}.
 		length:{{len()}}
 	</div>
+	<div ng-controller="listController">
+		<input ng-model="list" ng-list><br>
+		<pre>list={{list}}</pre><br>
+		<ol>
+			<li ng-repeat="l in list">
+				{{l}}
+			</li>
+		</ol>
+	</div>
+
+
+	<div ng-controller="formController">
+	<form name="form" novalidate>
+		Name:<input type="text" ng-model="user.name" name="uName" required />
+		E-mail:<input type="email" ng-model="user.email" name="uEmail" required />
+		<br>
+
+		<div ng-show="form.uEmail.$dirty && form.uEmail.$invalid">
+			<span ng-show="form.uEmail.$error.required"> email is null </span>
+			<span ng-show="form.uEmail.$error.email">email is not a valid email</span>
+		</div>
+
+		<input type="checkbox" ng-model="user.agree" name="userAgree" required />
+		I argree:<input type="text" ng-show="user.agree" ng-model="user.agreeSign" required/>
+		<div ng-show="!user.agree || !user.agreeSign">agree and sign</div>
+		
+		<button ng-click="reset()" ng-disabled="isUnchanged(user)">reset</button>
+		<button ng-click="update(user)" ng-disabled="form.$invalid || isUnchanged(user)">save</button>
+		<br>
+
+		master:{{master}}
+	</form>
+	</div>
+
+	<hr>
+
+	<div ng-controller="myController">
+		<input type="text" ng-model="message"/>
+		<br>
+		<button ng-click="callNotify(message)">notify</button>
+	</div>
 </body>
 <script type="text/javascript" src="angular.min.js"></script>
 <script>
 	var app = angular.module('demo',[])
 	var tomController = function($scope){
-		$scope.name="xxx";
-		$scope.len=function(){
+		$scope.name = "xxx";
+		$scope.len = function(){
 			return $scope.name.length;
 		};
 	};
 	
-	app.controller("tomController",tomController);
-	app.value("",function($scope){});
-	app.factory("demoservice",function(){
-		return {
-			name:"jim",
-			age:18
+	app.controller("tomController",tomController).controller("listController",function($scope){
+		$scope.list = ['a','b','c'];		
+	}).controller("formController",function($scope){
+		$scope.master = {};
+		$scope.update = function(user) {
+			$scope.master = angular.copy(user);
+		};
+		$scope.reset = function() {
+			$scope.user = angular.copy($scope.master);
+		};
+		$scope.isUnchanged = function(user) {
+			return angular.equals(user,$scope.master);
+		};
+		//$scope.reset();
+	}).controller("myController",function($scope,notify){
+		$scope.callNotify = function(msg) {
+			notify(msg);
 		};
 	});
+	app.value("",function($scope){});
+	app.factory("notify",["$window",function(win){
+		var msgs = [];
+		return function(msg){
+			msgs.push(msg);
+			if(msgs.length == 3){
+				win.alert(msgs.join("\n"));
+				msgs = [];
+			}
+		};
+	}]);
 </script>
 </html>

@@ -22,13 +22,23 @@
 		});
 		
 		
-		app.webController("webcontroller",function($scope,$http){
-			$http.get("http://www.w3cschool.cc/try/angularjs/data/Customers_JSON.php").success(function(response) {
-				alert("xxxx");
-				$scope.names = response;
+		app.controller("webcontroller",function($scope,$http){
+			var url="http://s.ktvdaren.com/ktv?p=1&size=10&wd=40.031677&jd=116.410164&r=50000&callback=JSON_CALLBACK&_=1429845411870";
+			//$http.get("http://www.w3cschool.cc/try/angularjs/data/Customers_JSON.php").success(function(response) {
+				//alert("xxxx");
+				//$scope.names = response;
+			//});
+			$http.jsonp(url).success(function(response){
+				$scope.ktvs = response.result.matches;
 			});
+			
 		});
 		
+		
+		
+		app.controller("domcontroller",function($scope){
+			$scope.myswitch=true;
+		});
 		
 		//function phoneController($scope){
 			//$scope.phones = [ { name : 'zzj' , snippet : '123456' },{ name : 'zs' , snippet : '7864' } ]; //1.2.5
@@ -58,7 +68,7 @@
     </li>
 </ul>
 </div> 
-
+<hr/>
 <div  ng-controller="phoneController">
 <ul>
     <li ng-repeat="phone in phones">
@@ -69,9 +79,21 @@
   {{tip}}
 </div>
 <div ng-controller="webcontroller">
-	<li ng-repeat="p in names">
-		{{p.Name}}
+	<li ng-repeat="p in ktvs">
+		{{p.storename}}
 	</li>
 </div>
+<hr/>
+<div ng-controller="domcontroller">
+<input  type="button" ng-disabled="myswitch" value="click me"></input>
+<input type="checkbox" ng-model="myswitch"></input>
+<p>{{myswitch}}</p>
+<p ng-show="myswitch">ngshow</p>
+<p ng-hide="myswitch">nghide</p>
+</div>
+<hr/>
+<div>
+	<input type="button" value="{{count}}" ng-click="count=count+1"></input>
+<div>
 </body>
 </html>

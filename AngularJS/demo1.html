@@ -50,12 +50,18 @@
 	</div>
 
 	<hr>
-
+	<h1>{{'this is filter test' | testfilter }}</hi>
+	<div ng-controller="xmpController">
+		<h1> {{userSay}} </h1>
+	</div>
+	<hr>
 	<div ng-controller="myController">
 		<input type="text" ng-model="message"/>
 		<br>
 		<button ng-click="callNotify(message)">notify</button>
 	</div>
+
+	<div ng-include="'footer.html'"></div>
 </body>
 <script type="text/javascript" src="angular.min.js"></script>
 <script>
@@ -85,8 +91,9 @@
 		$scope.callNotify = function(msg) {
 			notify(msg);
 		};
+	}).controller("xmpController",function($scope,uservalue){
+		$scope.userSay = uservalue.say("apple");	
 	});
-	app.value("",function($scope){});
 	app.factory("notify",["$window",function(win){
 		var msgs = [];
 		return function(msg){
@@ -96,6 +103,30 @@
 				msgs = [];
 			}
 		};
-	}]);
+	}]).factory("greeter",function($window){
+		return {
+			greet : function(text){
+				$window.alert(text);
+			}
+		}
+	}).filter("testfilter",function(){
+		return function(name){
+			return 'hello,' + name ;
+		}	
+	}).value("uservalue",{
+		name : 'jim',
+		setName : function(people){
+			this.name = people.name;
+		},
+		say : function(msg) {
+			return this.name + ' say:' + msg;
+		}
+	}).run(function(uservalue){
+			uservalue.setName({name : "jim.k"});
+	});
+
+	//var injector = angular.injector('demo');
+	//var greeter = injector.get('greeter');
+	//greeter.greet("this is greet");
 </script>
 </html>

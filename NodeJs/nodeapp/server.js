@@ -1,9 +1,20 @@
 var http = require("http");
 var router = require("./router");
 
-router.addRoute('/',require('./routers/index'));
-router.addRoute('/about',require('./routers/about'));
-router.addRoute('/contact',require('./routers/contact'));
+URLS = [
+["/","./routers/index"],
+["/about","./routers/about"],
+["/contact","./routers/contact"]
+];
+
+//router.addRoute('/',require('./routers/index'));
+//router.addRoute('/about',require('./routers/about'));
+//router.addRoute('/contact',require('./routers/contact'));
+
+
+for(index in URLS){
+	router.addRoute(URLS[index][0],require(URLS[index][1]));
+}
 
 function onListend(){
 	console.log("server listen at 8888");

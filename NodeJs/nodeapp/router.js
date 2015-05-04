@@ -2,7 +2,7 @@
 var http = require("http");
 
 function RouterData(route,handler){
-	this.route = route || "";
+	this.route = route || {};
 	this.handler = handler || {};
 	//this.id = uuid.v4();
 }
@@ -18,6 +18,7 @@ function Router(){
 	};
 
 	this.handleRoute = function(route,req,res){
+		console.log("ACCESS " + route);
 		var handler = getRouteHandlerByRoute(route);
 		if (!handler){
 			handle_404(route,req,res);
@@ -40,7 +41,7 @@ function Router(){
 
 	function handle_404(route,req,res){
 		res.writeHeader(404,{"Content-Type":"text/plain"});
-		res.end(route+' '+http.STATUS_CODES['404']);
+		res.end(route.pathname+' '+http.STATUS_CODES['404']);
 	}
 
 }

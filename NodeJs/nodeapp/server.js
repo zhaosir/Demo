@@ -21,7 +21,17 @@ function onListend(){
 }
 
 function onConnected(request,response){
-	router.handleRoute(request.url,request,response);
+	url = require("url");
+
+//	var post = "";
+//	request.addListener('data',function(chunk){
+//		post += chunk;
+//	});
+//	request.addListener('end',function(){
+//		console.log('postdata:'+post);
+//	});
+	route =  url.parse(request.url).pathname;
+	router.handleRoute(route,request,response);
 }
 
 var server = http.createServer(onConnected);

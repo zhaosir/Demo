@@ -1,6 +1,6 @@
-exports.world = function(){
-	console.log('hello world');
-};
+//exports.world = function(){
+//	console.log('hello world');
+//};
 
 function Hello(){
 	var name;
@@ -8,7 +8,7 @@ function Hello(){
 		name = thyName;
 	};
 	this.sayHello = function(){
-		console.log('hello' + name);
+		console.log('say hello to ' + name);
 	};
 };
-//module.exports = Hello;
+module.exports = new Hello();

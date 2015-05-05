@@ -40,7 +40,7 @@ function Index(){
 	//		post += chunk;
 	//	});
 	//	req.on('end',function(){
-	//		//适用于 Content-Type = appkucation/x-www-form-urlencoded
+	//		//适用于 Content-Type = application/x-www-form-urlencoded
 	//		//console.log("form data : " + post);
 	//		var querystring = require("querystring");
 	//		var form = querystring.parse(post);

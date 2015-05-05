@@ -17,7 +17,7 @@ for(index in URLS){
 }
 
 function onListend(){
-	console.log("server listen at 8888");
+	console.log("server listen at %d",server.address().port);
 }
 
 function onConnected(request,response){

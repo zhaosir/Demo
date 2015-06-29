@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" >
+
+<head>
+<script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>  
+var c_name = "6dd2___msess";
+function getCookie(c_name) {  
+	if (document.cookie.length>0)  
+	{  
+		c_start=document.cookie.indexOf(c_name + "=");  
+		if (c_start!=-1)  
+		{   
+			c_start=c_start + c_name.length+1 ;  
+			c_end=document.cookie.indexOf(";",c_start);  
+			if (c_end==-1) c_end=document.cookie.length;  
+			return unescape(document.cookie.substring(c_start,c_end));  
+		}   
+	}  
+		return "";  
+}  
+	window.onload=function(){  
+	if(getCookie(c_name) !=null){  
+		//alert(getCookie(c_name));  
+	}
+	else{
+		//alert("hello");
+	}	
+}  
+$(function(){ 
+	$("#btn_test").click(function(){
+		alert("xxxx");
+		var $iframe = $("#wx_0395");
+		//var win = $iframe.get(0).contentWindow;
+		//alert(win.document);
+		var h = $(document.getElementById('wx_0395').contentWindow.document.body).html()
+		alert(h);
+		alert(getCookie(c_name)); 
+		alert("xxxxend");
+	});
+});
+
+</script> 
+<title></title>
+</head>
+<body>
+<iframe id="wx_0395" src="http://wx.0395.tv/new/mobile.php?act=module&do=detail&name=pvote&id=74&weid=6&vid=83" ></iframe>
+
+<hr>
+<button id="btn_test">CLICK</button>
+</body>
+
+</html>

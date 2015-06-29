@@ -11,8 +11,8 @@
 		$("#btn_open").click(function(){
 			cid = $("#cid").val()
 			alert(cid)
-//			ws = new WebSocket("ws://10.0.177.30:8100/ws?id="+cid);
-			ws = new WebSocket("ws://61.135.173.43:8010/ws/1234")
+			ws = new WebSocket("ws://10.0.177.30:8100/ws?id="+cid);
+//			ws = new WebSocket("ws://61.135.173.43:8010/ws/1234")
 			ws.onmessage = function(e){
 				$("#msgs").append(e.data)
 			};

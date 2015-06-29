@@ -6,10 +6,24 @@ import tornado.web
 import tornado.websocket
 import tornado.httpserver
 import tornado.ioloop
+import memcache
+
+def _getmc():
+	return memcache.Client(['127.0.0.1:11211'])
+
+def saveclient(c,cid):
+	mc = _getmc()
+	mc.set('c:'+cid,c)
+
+def getclient(cid):
+	return  _getmc().get('c:'+cid)
+
 
 cl = {}
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
+
+
 	def check_origin(self,origin):
 		return True
 
@@ -21,6 +35,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 		if cid and not cl.has_key(cid):
 			cl[cid] = self
+
+#		saveclient(self,cid)
 
 	def on_message(self,message):
 		self.write_message('message:' + message)
@@ -38,6 +54,9 @@ class ApiHandler(tornado.web.RequestHandler):
 	def get(self):
 		msg = self.get_argument('msg',None)
 		cid = self.get_argument('cid',None)
+		c = getclient(cid)
+		if c:
+			c.write_message(msg)
 		if cl.has_key(cid):
 			cl[cid].write_message(msg)
 #		for c in cl.iteritems():

@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html ng-app="demo">
+<html ng-app="myApp">
 <head>
     <meta charset="utf-8">
     <title>demo</title>
@@ -32,10 +32,23 @@
 </head>
 <body>
 
-<div ng-controller="nameController">
-	<direct info="{{ Name }}"></direct>
-    <input type="button" ng-bind="Name" ng-model="Name"></input>
-</div>
+  <div ng-controller='MainController'>
+        父亲: {{name}}
+        <input ng-model="name" />
+        <div my-directive></div>
+  </div>
+  <script>
+    angular.module('myApp', []).controller('MainController', function ($scope) 
+        {
+                   $scope.name = 'leifeng';
+        }).directive('myDirective', function () {
+                            return {
+                                        restrict: 'EA',
+                                        scope:true,//改变此处的取值,看看有什么不同
+                                        template: '<div>儿子:{{ name }}<input ng-model="name"/></div>'
+                                    };
+         });
+  </script>
 
-</body>
-</html>
+  </body>
+  </html>

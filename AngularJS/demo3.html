@@ -1,11 +1,8 @@
 ﻿<!doctype html>
-<<<<<<< HEAD
 <html ng-app="myApp">
-=======
 
 <html>
 
->>>>>>> 9d96672560b802daa0009026457091204e789e9d
 <head>
     <meta charset="utf-8">
     <title>demo</title>
@@ -36,27 +33,23 @@
 </style> -->
 
 <style>
-/*这是低端浏览器下placeholder的字体颜色*/
-placeholder{
-    color: #909;
+
+.invalid:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: red;  
 }
-/*这是firefox下placeholder的字体颜色*/
-::-moz-placeholder {
-    color: #909;
+
+.invalid::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: red;
 }
-/*这是webkit下placeholder的字体颜色*/
-::-webkit-input-placeholder {
-    color: #909;
+
+input.invalid:-ms-input-placeholder{
+        color: red;
 }
-/*
- *    满足这两个条件，该js能工作的更好，更智能
- *    1.文本框的父定位元素需加入*zoom: 1
- *    2.文本框或其父元素的position，不能同时为static
- */
-.textbox {
-    position: relative;
-    *zoom: 1;
+
+input.invalid::-webkit-input-placeholder {
+        color: red;
 }
+
 </style>
 
 </head>
@@ -90,7 +83,6 @@ placeholder{
 </head>
 <body>
 
-<<<<<<< HEAD
   <div ng-controller='MainController'>
         父亲: {{name}}
         <input ng-model="name" />
@@ -108,17 +100,15 @@ placeholder{
                                     };
          });
   </script>
-=======
 <div ng-controller="nameController">
 	<direct info="{{ Name }}"></direct>
     <input type="button" ng-bind="Name" ng-model="Name"></input>
-	<input type="text" id="name" name="name"  placeholder="请输入姓名" autofocus>
+	<input type="text" id="name" name="name" class="invalid"  placeholder="请输入姓名" autofocus>
 </div>
 
 <div class="textbox">
     <input type="password" placeholder="请输入密码" autofocus>
 </div>
->>>>>>> 9d96672560b802daa0009026457091204e789e9d
 
   </body>
-  </html>
+</html>

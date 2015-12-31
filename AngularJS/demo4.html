@@ -3,48 +3,67 @@
 <head>
     <meta charset="utf-8">
     <title>demo</title>
-	<!--<script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>-->
+	<script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 	<!--<script type="text/javascript" src="http://www.w3cschool.cc/try/angularjs/1.2.5/angular.min.js"></script>-->
 	<script type="text/javascript" src="angular.min.js"></script>
 	<script type="text/javascript">
 	  angular.module("demo", [])
 	   .controller("TestController", function($scope) {
 		$scope.obj = {
-		 number: 34
-		};
+//            passwd : 10
+        };
 	   })
 	   .directive("ngTest", function(){
 		 return {
-		   require: "?ngModel",
+		   require: "ngModel",
 		   restrict: "AE",
-		   link: function($scope, iElm, iAttrs, ngModel) {
-			 if(!ngModel) return;
-			 ngModel.$parsers.push(function(viewValue){
-			   var num = parseInt(viewValue);
-			   if(num>=0 && num<99){
-				 ngModel.$setValidity("test",true);
-				 return viewValue;
-			   }else{
-				 ngModel.$setValidity("test",false);
-				 return undefined;
-			   }
-			 });
-		   }
-		 };
-	   });
+		   link: function($scope, $element, $attrs, $ngModelCtrl) {
+			 if(!$ngModelCtrl) return;
+
+             var valid = function(input){
+                var verifyRule = /^.{6,16}$/;
+                if (!verifyRule.test(input ? input : "")){
+                    $ngModelCtrl.$setValidity('required', false);
+                    return false;
+                }
+                var repasswd = $attrs.ngTest;
+                if (repasswd) {
+                   var firstPassword = '#' + repasswd;
+                   if ($(firstPassword).val() != input) {
+                        $ngModelCtrl.$setValidity('required', false);
+                        return false;
+                   }
+                }
+                $ngModelCtrl.$setValidity('required', true);
+                return true;
+             }
+
+			 $ngModelCtrl.$parsers.push(function(input){
+                if(valid(input))
+                    return input;
+                return undefined;
+			});
+            $ngModelCtrl.$formatters.push(function(input){
+                console.log('$formatters');
+                return input;
+            });
+
+			 }
+		   };
+		 });
 	 </script>
 </head>
 <body>
 
 <div ng-controller="TestController">
   <form name="testForm">
-   <input type="text" name="inputs" ng-test ng-model="obj.number">
-   <span ng-show="testForm.inputs.$error.test">good</span>
-   <span ng-hide="testForm.inputs.$error.test">bad</span>
-   <div>A:  {{ testForm.inputs.$valid }}</div>
-   <div>B： {{ testForm.inputs.$invalid }}</div>
-   <div>C： {{testForm.$valid}}</div>
-   <div>{{ obj.number }}</div>
+  passwd:<input type="password" name="passwd" id="passwd"  ng-test ng-model="obj.passwd"></br>
+  repasswd: <input type="password" name="repasswd" ng-model="obj.repasswd"  ng-test="passwd" /></br>
+   <span>valid_passwd:{{testForm.passwd.$valid}}</span><br>
+   <span>valid_repaddwd:{{testForm.repasswd.$valid}}</span><br>
+   <div>C： {{testForm.$valid}}</div><br>
+   <div>{{ obj.passwd }}</div><br>
+   <div></div>
   </form>
  </div>
 

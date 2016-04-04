@@ -1,24 +1,36 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
 
-data = range(8)
-total = len(data)
-line = 3
-rowcount = total / line
+class MyTest(object):
+    def __new__(self,*args,**kwargs):
+        print '__new__'
+        return super(MyTest,self).__new__(self,*args,**kwargs)
 
-if total % line >0:
-    rowcount = rowcount + 1
+    def __init__(self,name):
+        print '__init__'
+        self.name = name
 
-print rowcount
+    def test(self):
+        print 'test' ,self.name
 
-#res = {}
-for i in range(rowcount):
-    res = []
-    idx_1 = i
-    for j in range(line):
-        idx_2 = j + 1
-        idx = (idx_1 * line)  + idx_2
-#        print idx_1,idx_2
-        if idx < total:
-            print idx
+    @classmethod
+    def hello(self):
+        if not hasattr(self,'name'):
+            print 'hello'
+        else:
+            print 'hello' ,self.name
+
+
+
+if __name__ == '__main__':
+    MyTest.hello()
+
+    print '-----'
+    t = MyTest('tom')
+    t.hello()
+    t.test()
+
+    print '-----'
+    MyTest.hello()
+    t.hello()
     

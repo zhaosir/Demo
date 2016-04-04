@@ -36,9 +36,30 @@ class Child(Parent):
         print '__getattr__:',args,kwargs
 #return object.__getattribute__(self, *args, **kwargs)
         return super(Child,self).__getattribute__(*args,**kwargs)
+    
+    def __call__(self,name):
+        print '__call__',name
+
+    @property
+    def test_property(self):
+        print 'property'
+
+    @classmethod
+    def test_classmethod(self):
+        print 'classmethod'
+        Child.test_staticmethod()
+
+    @staticmethod
+    def test_staticmethod():
+        print 'staticmechod'
 
 if __name__ == '__main__':
 #    Child().bar1('msg')
+    Child.test_staticmethod()
     child = Child()
-    child.name = 'jim'
-    print Child().name
+#    child.name = 'jim'
+#    print Child().name
+#    child('lilei')
+
+    Child.test_classmethod()
+    child.test_property

@@ -77,7 +77,21 @@ def m_return_future(f):
 
     return wrapper
 
+def m_engine(func):
+    func = m_make_coroutine_wrapper(func, replace_callback=False)
+    def wrapper(*args, **kwargs):
+        future = func(*args, **kwargs)
+        def final_callback(future):
+            if future.result() is not None:
+                raise ReturnValueIgnoredError("@gen.engine functions cannot return values: %r" % (future.result(),))
+        future.add_done_callback(stack_context.wrap(final_callback))
+        return wrapper
+
 def m_coroutine(func, replace_callback=True):
+    return m_make_coroutine_wrapper(func, replace_callback)
+
+
+def m_make_coroutine_wrapper(func, replace_callback=True):
     if hasattr(types, 'm_coroutine'):
         func = types.coroutine(func)
 
@@ -128,8 +142,8 @@ def future_func(arg1, arg2, callback):
     callback(result)
     print 'callback end'
 
-#@gen.engine
-@m_coroutine
+@gen.engine
+#@m_coroutine
 def caller():
 #    res = yield future_func(1, 2, handler_call)
     res = yield future_func(1, 2)

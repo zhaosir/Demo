@@ -7,13 +7,40 @@ import time
 import tornado.httpserver
 import tornado.ioloop
 from tornado.options import define,options
+import logging
 
 
-class testHandler(tornado.web.RequestHandler):
+logger = logging.getLogger(__name__)
+
+class Tools(object):
+
+    def __init__(self):
+        self.count = 0
+        print 'Tools.__init__'
+
+class testHandler(tornado.web.RequestHandler, Tools):
+
+    def initialize(self):
+        if hasattr(self,'num'):
+            print self.num
+        self.num = 0
+
+        if hasattr(self,'num'):
+            print 'alter:',self.num
+        print 'testHandler.initialize'
+#
+#    def __init__(self, *args, **kwargs):
+#        print 'testHandler.__init__'
+
     def get(self):
+        self.count += 1
+        self.num += 1
+        logger.debug('debug:%s',time.time())
         self.write({
                     'code' : 1,
-                    'time' : int(time.time())
+                    'time' : int(time.time()),
+                    'count' : self.count,
+                    'num' : self.num
                 })
 
 

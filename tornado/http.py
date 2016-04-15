@@ -50,9 +50,19 @@ def test():
 def test1():
     http_client = httpclient.AsyncHTTPClient()
     resp = yield http_client.fetch('http://127.0.0.1:8500/test')
-    print resp.body
+    print resp
 
+@gen.coroutine
+def test2():
+    http_client = httpclient.AsyncHTTPClient()
+    resp = yield gen.Task(http_client.fetch, 'http://127.0.0.1:8500/test')
+    raise gen.Return(resp.body)
+
+@gen.coroutine
+def test3():
+    resp = yield test2()
+    print resp
 if __name__ == '__main__':
 #    test()
-    tornado.ioloop.IOLoop.instance().run_sync(test1)
+    tornado.ioloop.IOLoop.instance().run_sync(test3)
 #    time.sleep(2)

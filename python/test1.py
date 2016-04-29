@@ -1,9 +1,13 @@
 #/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+
+import sys
 from functools import partial
 from functools import update_wrapper
 from functools import reduce
+#from test import MyTest
+test = __import__('test')
 
 t = {
     'info' : {
@@ -57,9 +61,12 @@ class MRange(object):
 if __name__ == '__main__':
 #    a = test(t)
 #    print a.next()
-
-    for i in MRange(10).next():
-        print i
+    if hasattr(test, 'MyTest'):
+        print 'xxx'
+#    m = MyTest('jim')
+#    m.test()
+#    for i in MRange(10).next():
+#        print i
 
     print filter(lambda x : x!='a','iahaha')
     print map(lambda x,y : x - y ,(1,2),(3,4))

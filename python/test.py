@@ -10,8 +10,10 @@ class MyTest(object):
         print '__init__'
         self.name = name
 
-    def test(self):
+    def test(self, add, **kwargs):
         print 'test' ,self.name
+        print add
+        print kwargs
 
     @classmethod
     def hello(self):
@@ -19,7 +21,10 @@ class MyTest(object):
             print 'hello'
         else:
             print 'hello' ,self.name
-
+    
+    @staticmethod
+    def show(msg):
+        print 'msg:', msg
 
 
 if __name__ == '__main__':
@@ -27,8 +32,9 @@ if __name__ == '__main__':
 
     print '-----'
     t = MyTest('tom')
-    t.hello()
-    t.test()
+    getattr(t,'method')
+#    t.hello()
+#    t.test('add' , **{'a':'v'})
 
     print '-----'
     MyTest.hello()

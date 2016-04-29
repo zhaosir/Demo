@@ -5,13 +5,15 @@ import sys
 import tornado
 from tornado.concurrent import TracebackFuture, return_future
 from tornado import httputil, stack_context
-from tornado import gen
+import gen
 import tornado.ioloop
 from inspect import getargspec
 from tornado.util import raise_exc_info, ArgReplacer
 from tornado.stack_context import ExceptionStackContext, wrap
 import types
 from types import GeneratorType
+import ipdb
+from gen import Return
 
 def handler_call(res):
     print 'in handler_call', res
@@ -42,6 +44,7 @@ def m_return_future(f):
 
     def wrapper(*args, **kwargs):
         future = TracebackFuture()
+#        ipdb.set_trace()
         print args, kwargs
 #        callback, args, kwargs = replacer.replace(lambda value=_NO_RESULT: future.set_result(value),args, kwargs)
         callback = None
@@ -95,7 +98,9 @@ def m_make_coroutine_wrapper(func, replace_callback=True):
     if hasattr(types, 'm_coroutine'):
         func = types.coroutine(func)
 
+#    ipdb.set_trace()
     def wrapper(*args, **kwargs):
+        ipdb.set_trace()
         future = TracebackFuture()
         if replace_callback and 'callback' in kwargs:
             callback = kwargs.pop('callback')
@@ -104,11 +109,14 @@ def m_make_coroutine_wrapper(func, replace_callback=True):
         try:
             result = func(*args, **kwargs)
         except (Return, StopIteration) as e:
-            result = _value_from_stopiteration(e)
+#            ipdb.set_trace()
+            result = gen._value_from_stopiteration(e)
         except Exception:
+#            ipdb.set_trace()
             future.set_exc_info(sys.exc_info())
             return future
         else:
+#            ipdb.set_trace()
             if isinstance(result, GeneratorType):
                 try:
                     orig_stack_contexts = stack_context._state.contexts
@@ -117,11 +125,17 @@ def m_make_coroutine_wrapper(func, replace_callback=True):
                         yielded = TracebackFuture()
                         yielded.set_exception(stack_context.StackContextInconsistentError('stack_context inconsistency (probably caused'))
                 except (StopIteration, Return) as e:
-                    future.set_result(_value_from_stopiteration(e))
+                    future.set_result(gen._value_from_stopiteration(e))
                 except Exception:
                     future.set_exc_info(sys.exc_info())
                 else:
-                    gen.Runner(result, future, yielded)
+                    try:
+                        result.send(yielded.result()) 
+                    except (StopIteration, Return) as e:
+                        ipdb.set_trace()
+                        future.set_result(gen._value_from_stopiteration(e))
+                        
+#                    gen.Runner(result, future, yielded)
                 try:
                     return future
                 finally:
@@ -133,27 +147,31 @@ def m_make_coroutine_wrapper(func, replace_callback=True):
             
 
             
-
-@m_return_future
-def future_func(arg1, arg2, callback):
+@m_coroutine
+def future_func(arg1, arg2):
     result = arg1 + arg2
     # Do stuff (possibly asynchronous)
     print 'callback begin'
-    callback(result)
+#    callback(result)
+    raise gen.Return(result)
     print 'callback end'
 
-@gen.engine
+#@m_engine
 #@m_coroutine
 def caller():
+#    ipdb.set_trace()
 #    res = yield future_func(1, 2, handler_call)
-    res = yield future_func(1, 2)
-    print res
+    res = yield future_func(9, 2)
+    print 'result', res
+#    ipdb.set_trace() 
+#    print res
 #    callback()
+    pass
 
 def main():
     caller()
 
 if __name__ == '__main__':
-    tornado.ioloop.IOLoop.current().run_sync(main)
+    tornado.ioloop.IOLoop.current().run_sync(caller)
 
 

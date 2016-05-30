@@ -157,10 +157,12 @@ def future_func(arg1, arg2):
     print 'callback end'
 
 #@m_engine
-#@m_coroutine
+@m_corocallere
 def caller():
 #    ipdb.set_trace()
 #    res = yield future_func(1, 2, handler_call)
+
+    print 'run in caller'
     res = yield future_func(9, 2)
     print 'result', res
 #    ipdb.set_trace() 
@@ -168,6 +170,7 @@ def caller():
 #    callback()
     pass
 
+@m_coroutine
 def main():
     caller()
 

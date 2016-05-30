@@ -9,13 +9,15 @@ credentials = PlainCredentials(username='test', password='test')
 parameters = pika.ConnectionParameters(host = '192.168.199.232', port=5672, credentials=credentials )
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
-channel.queue_declare(queue = 'task_queue_test' , durable = True )
-message = ' ' .join(sys.argv[ 1 :]) or "Hello World!"
-channel.basic_publish(exchange = '',
-                       routing_key = 'task_queue' ,
-                       body = message,
-                       properties = pika.BasicProperties(
-                          delivery_mode = 2 , # make message persistent
-                       ))
-print " [x] Sent %r" % (message,)
+channel.queue_declare(queue = 'task_queue' , durable = True )
+for i in xrange(100):
+    message = ' ' .join(sys.argv[ 1 :]) or "Hello World!"
+    message += str(i % 2)
+    channel.basic_publish(exchange = '',
+                           routing_key = 'task_queue' ,
+                           body = message,
+                           properties = pika.BasicProperties(
+                              delivery_mode = 2 , # make message persistent
+                           ))
+    print " [x] Sent %r" % (message,)
 connection.close()

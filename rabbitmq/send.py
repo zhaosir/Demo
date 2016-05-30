@@ -11,7 +11,17 @@
 
 import sys
 import pika
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))  
+from pika.credentials import PlainCredentials
+
+host = '192.168.199.232'
+port = 5672
+user = 'test'
+passwd = 'test'
+vhost = '/'
+
+credentials = PlainCredentials(username=user, password=passwd)                                                            
+parameters = pika.ConnectionParameters(host=host, port=port, virtual_host=vhost, credentials=credentials)
+connection = pika.BlockingConnection(parameters)
 channel = connection.channel()  
 channel.queue_declare(queue = 'hello')  
 if len (sys.argv) < 2 :  

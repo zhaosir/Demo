@@ -16,5 +16,5 @@ def callback(ch, method, properties, body):
         ch.basic_ack(delivery_tag = method.delivery_tag)
           
 channel.basic_qos(prefetch_count = 1 )
-channel.basic_consume(callback, queue = 'task_queue')
+channel.basic_consume(callback, queue = 'task_queue_test')
 channel.start_consuming()

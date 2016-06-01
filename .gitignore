@@ -3,3 +3,5 @@
 *.pyc
 *.txt
 node_modules/
+build/
+test/

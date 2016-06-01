@@ -3,6 +3,7 @@
 
 import socket
 import thread
+import time
 
 host = '127.0.0.1'
 port = 8500
@@ -17,13 +18,19 @@ except Exception, ex:
 
 def clientthread(conn, addr):
     print 'client fileno:%s' % conn.fileno()
+    conn.setblocking(False)
     while 1:
-        data = conn.recv(1024)
-        print 'recv:%s' % data
-        if data == 'exit':
-            conn.close()
-            break
-        conn.sendall('ok' + data)
+        try:
+            data = conn.recv(1024)
+    #        data = data.rstrip('\n') 
+            print 'recv:(%s)' % data
+            print type(data)
+            if data == 'exit':
+                conn.close()
+                break
+            conn.sendall('ok\n')
+        except:
+            time.sleep(0.1)
 
 
 s.listen(1)

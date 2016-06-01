@@ -65,8 +65,21 @@ class Test3(Test2):
         print 'config'
 #        return MyTest('jim')
 
+def cut_data(data, section=100):                                           
+    d_len = len(data)
+    cut_count = d_len / section + (1 if d_len % section > 0 else 0)
+    print cut_count
+    for i in xrange(cut_count):
+        start = i * section
+        end = (i + 1) * section
+        if end > d_len:
+            end = d_len 
+        yield data[start:end]
+
 if __name__ == '__main__':
-    a = Test2()
-    print a.tip()
+    for d in cut_data(range(50), 100):
+        print d
+#    a = Test2()
+#    print a.tip()
 #    MyTest.show('f')
     

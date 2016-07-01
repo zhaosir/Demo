@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
 
+import hashlib
+
 class MyTest(object):
 #    def __new__(self,*args,**kwargs):
 #        print '__new__'
@@ -76,9 +78,16 @@ def cut_data(data, section=100):
             end = d_len 
         yield data[start:end]
 
+def test_md5():
+    a = set()
+    for i in xrange(0,257):
+        a.add(hashlib.md5(str(i)).hexdigest()[-2:])
+    return a
+
 if __name__ == '__main__':
-    for d in cut_data(range(50), 100):
-        print d
+    print len(test_md5())
+#    for d in cut_data(range(50), 100):
+#        print d
 #    a = Test2()
 #    print a.tip()
 #    MyTest.show('f')

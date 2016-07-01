@@ -3,6 +3,7 @@
 
 
 import sys
+import functools
 from functools import partial
 from functools import update_wrapper
 from functools import reduce
@@ -38,6 +39,7 @@ def add(a,b):
 
 
 def wrapper_a(func):
+    @functools.wraps(func)
     def wrapper(*args,**kwargs):
         print args
         return func(*args,**kwargs) + ' word !'
@@ -45,6 +47,8 @@ def wrapper_a(func):
 
 @wrapper_a
 def test_warpper():
+    '''this is test_warpper
+    '''
     return 'hello'
 
 
@@ -61,20 +65,20 @@ class MRange(object):
 if __name__ == '__main__':
 #    a = test(t)
 #    print a.next()
-    if hasattr(test, 'MyTest'):
-        print 'xxx'
+#    if hasattr(test, 'MyTest'):
+#        print 'xxx'
 #    m = MyTest('jim')
 #    m.test()
 #    for i in MRange(10).next():
 #        print i
 
-    print filter(lambda x : x!='a','iahaha')
-    print map(lambda x,y : x - y ,(1,2),(3,4))
-    print reduce(lambda x,y:x+y,xrange(100))  
+#    print filter(lambda x : x!='a','iahaha')
+#    print map(lambda x,y : x - y ,(1,2),(3,4))
+#    print reduce(lambda x,y:x+y,xrange(100))  
     
-    add1 = partial(add,b=1)
-    print add1(2)
+#    add1 = partial(add,b=1)
+#    print add1(2)
 
-    print test_warpper()
-    for a in test(t):
-        print a
+    print test_warpper.__doc__
+#    for a in test(t):
+#        print a

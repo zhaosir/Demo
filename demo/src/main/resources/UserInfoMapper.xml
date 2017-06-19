@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.UserInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.example.demo.model.UserInfo">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="nick" jdbcType="VARCHAR" property="nick" />
+        <result column="figure_url" jdbcType="VARCHAR" property="figureUrl" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    </resultMap>
+
+    <select id="queryUserList" resultMap="BaseResultMap">
+        select * from t_user
+        <trim prefix="WHERE" suffixOverrides=" AND | OR">
+            <if test="name != null">
+                nick = #{name} and
+            </if>
+        </trim>
+        order by uid
+    </select>
+</mapper>

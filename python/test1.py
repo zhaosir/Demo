@@ -62,7 +62,14 @@ class MRange(object):
             yield self.cur
             self.cur = self.cur + 1
 
+
+@wrapper_a
+class testC:
+    def __init__(self):
+        print "__init__"
+
 if __name__ == '__main__':
+    t = testC()
 #    a = test(t)
 #    print a.next()
 #    if hasattr(test, 'MyTest'):
@@ -79,6 +86,6 @@ if __name__ == '__main__':
 #    add1 = partial(add,b=1)
 #    print add1(2)
 
-    print test_warpper.__doc__
+#    print test_warpper.__doc__
 #    for a in test(t):
 #        print a

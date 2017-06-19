@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # -*- coding:utf-8 -*-
-
 import functools
 import sys
 
@@ -64,10 +63,29 @@ class Test:
 def testwrapper():
     print 'in method testwrapper'
 
-if __name__ == '__main__':
-    testwrapper()
+#if __name__ == '__main__':
+#    testwrapper()
 #    print subway()
 #  print(square(3))
 #  print '-' * 30
 #  print(square.__doc__)
 #  print(square.__name__)
+
+
+
+
+
+def testbibao():
+    a = []
+    def n(k):
+        def show(v):
+            print k, v
+        return show
+
+    for k, v in ((1, 'a'),(2, 'b'),(3, 'c')):
+        a.append(n(k))    
+
+    for f in a:
+        f(1)
+
+testbibao()
